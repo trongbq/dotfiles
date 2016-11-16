@@ -1,0 +1,14 @@
+[core]
+  autocrlf = false
+[color]
+  ui = auto
+[alias]
+  aa = add --all
+  ap = add --patch
+  ci = commit -v
+  co = checkout
+  pf = push --force-with-lease
+  st = status
+  unstage = reset HEAD --
+  last = log -1 HEAD
+  visual = !gitk
