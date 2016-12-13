@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/home/a161018/.zsh'
+let g:netrw_dirhist_2='/home/a161018/.tmux'
+let g:netrw_dirhist_3='/home/a161018/data/workspace/general/learn-tools/learn-chef/cookbooks/awesome_customers_ubuntu/.kitchen'
+let g:netrw_dirhist_4='/home/a161018/data/workspace/c/projecteuler/.git'
