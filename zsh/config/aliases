@@ -1,3 +1,0 @@
-alias ashconfig="source ~/.zshrc"
-alias vim="nvim"
-
