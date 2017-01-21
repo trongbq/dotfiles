@@ -1,5 +1,6 @@
 execute pathogen#infect()
 
+set nocompatible
 syntax enable                              " enable syntax processing
 filetype plugin indent on                  " load filetype-specific indent files
 colorscheme Tomorrow-Night                 " using colorscheme from colors folder
