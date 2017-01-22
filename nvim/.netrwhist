@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/trongbui/data/workspace/ruby/rails'
+let g:netrw_dirhist_2='/home/trongbui/data/workspace/ruby/rails/actionpack'
+let g:netrw_dirhist_3='/home/trongbui/data/workspace/ruby/rails/actionpack/bin'
+let g:netrw_dirhist_4='/home/trongbui/data/workspace/ruby/rails/activerecord/examples'
+let g:netrw_dirhist_5='/home/trongbui/data/workspace/ruby/rails'
