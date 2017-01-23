@@ -30,6 +30,14 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
+if [ "$TERM" = "xterm" ]; then
+  export TERM=xterm-256color
+fi
+if [ "$TERM" = "screen" -o "$TERM" = "screen-256color" ]; then
+  export TERM=screen-256color
+  unset TERMCAP
+fi
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
@@ -58,7 +66,7 @@ parse_git_branch() {
 
 if [ "$color_prompt" = yes ]; then
     # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    PS1=$'\e[1;33m\u2794  \W\e[1;31m$(parse_git_branch) \e[1;33m$\e[m '
+    PS1=$'\e[1;33m\u2794 \W\e[m\e[1;31m$(parse_git_branch)\e[m \e[1;33m$\e[m '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -118,7 +126,7 @@ if ! shopt -oq posix; then
 fi
 
 # git branch autocomplete
-source ~/.git-completion.bash
+# source ~/.git-completion.bash
 
 # Incremental history searching
 bind '"\e[A": history-search-backward'
