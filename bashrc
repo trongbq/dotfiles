@@ -46,7 +46,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -58,17 +58,6 @@ if [ -n "$force_color_prompt" ]; then
 	color_prompt=
     fi
 fi
-
-source ~/.git-prompt.sh
-git_branch=$'\[\033[38;5;9m\]\[$(__git_ps1 "[%s]")\]'
-if [ "$color_prompt" = yes ]; then
-    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u \[$(tput sgr0)\]on \[\033[01;32m\]\H\[\033[00m\] \[$(tput sgr0)\]in \[\033[01;33m\]\W$git_branch\[\033[00m\]"
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '
-fi
-tail_prompt="\n\[\033[01;30m\]\$\[\033[00m\]\[$(tput sgr0)\] "
-PS1="$PS1$tail_prompt"
-unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -109,6 +98,10 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_prompt
+fi
+
+if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
@@ -122,3 +115,4 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
