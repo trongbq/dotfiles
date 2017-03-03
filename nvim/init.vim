@@ -17,6 +17,8 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'terryma/vim-multiple-cursors'
 " ack.vim
 Plug 'mileszs/ack.vim'
+" autopair gentle
+Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
 " Airline status line
@@ -37,11 +39,14 @@ set smarttab	                       " Enable smart-tabs
 set showmatch                        " highlight matching [{()}]
 set incsearch                        " search as characters are entered
 set hlsearch                         " hightlight matches
-set clipboard=unnamedplus            " copy to clipboard
+"set clipboard=unnamedplus            " copy to clipboard
 set autoread
 set autowrite
 set colorcolumn=80,100
 set expandtab                       " Expand tab to spaces
+set autoindent                    	" Auto-indent new lines
+set smartindent	                    " Enable smart-indent
+set softtabstop=4	                  " Number of spaces per Tab
 
 " Disable backup files
 set nobackup
