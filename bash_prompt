@@ -1,4 +1,4 @@
-# ~/.bash_prompt 
+# ~/.bash_prompt
 
 COLOR_BLACK="\e[1;30m"
 COLOR_RED="\e[1;31m"
@@ -41,5 +41,5 @@ function git_branch {
 PS1="\[$COLOR_YELLOW\]\W"          # basename of pwd
 PS1+="\[\$(git_color)\]"        # colors git status
 PS1+="\$(git_branch)"           # prints current branch
-PS1+="\[$COLOR_BLUE\] ● \[$COLOR_RESET\]"   # '#' for root, else '$'
+PS1+="\[$COLOR_YELLOW\] ● \[$COLOR_RESET\]"   # '#' for root, else '$'
 export PS1
