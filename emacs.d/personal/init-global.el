@@ -13,11 +13,8 @@
 (pending-delete-mode t)
 
 ;; Display line and column numbers
-(setq line-number-mode    t)
 (setq column-number-mode  t)
-
-;; Small fringes
-(set-fringe-mode '(1 . 1))
+(global-linum-mode t)
 
 ;; Disable scroll bars, menu bar, tool bar
 (when (boundp 'scroll-bar-mode)
@@ -29,13 +26,10 @@
 (setq tab-width 2)
 
 ;; Explicitly show the end of a buffer
-(set-default 'indicate-empty-lines t)
-
-;; Line-wrapping
-(set-default 'fill-column 100)
+(setq-default indicate-empty-lines t)
 
 ;; Prevent the annoying beep on errors
-;; (setq visible-bell t)
+(setq visible-bell t)
 
 ;; Make sure all backup files only live in one place
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
