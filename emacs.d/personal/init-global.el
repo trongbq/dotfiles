@@ -13,8 +13,10 @@
 (pending-delete-mode t)
 
 ;; Display line and column numbers
-(setq column-number-mode  t)
 (global-linum-mode t)
+
+;; Enable auto pairs
+(electric-pair-mode t)
 
 ;; Disable scroll bars, menu bar, tool bar
 (when (boundp 'scroll-bar-mode)
