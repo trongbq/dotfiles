@@ -42,6 +42,9 @@
 ;; switch between windows
 (global-set-key (kbd "M-o") 'other-window)
 
+;; Enable auto revert buffer
+(global-auto-revert-mode 1)
+
 ;; Don't truncate lines
 (setq truncate-lines t)
 (setq truncate-partial-width-windows nil)
