@@ -9,9 +9,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'jpo/vim-railscasts-theme'
 " tagbar
 Plug 'majutsushi/tagbar'
-" deoplete
+" deoplete for auto completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" fuzzy search 
+" fuzzy files searching 
 Plug 'ctrlpvim/ctrlp.vim'
 " multicursors
 Plug 'terryma/vim-multiple-cursors'
@@ -21,83 +21,87 @@ Plug 'mileszs/ack.vim'
 Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
-" Airline status line
-let g:airline_theme='sol'
-let g:airline_powerline_fonts = 1
 
-" Editor settings
+"""""""""""""""""""""""
+" Essential settings
+"""""""""""""""""""""""
 colorscheme railscasts
 filetype plugin indent on            " load filetype-specific ident files
 set number                           " enable line number
 set cursorline                       " highlight current line
 set tabstop=2                        " number of visual spaces per TAB
 set softtabstop=2                    " number of spaces in tab when editing
-set autoindent	                     " Auto-indent new lines
-set shiftwidth=2                   	 " Number of auto-indent spaces
-set smartindent                      " Enable smart-indent
-set smarttab	                       " Enable smart-tabs
+set autoindent	                     " auto-indent new lines
+set shiftwidth=2                   	 " number of auto-indent spaces
+set smartindent                      " enable smart-indent
+set smarttab	                       " enable smart-tabs
 set showmatch                        " highlight matching [{()}]
 set incsearch                        " search as characters are entered
 set hlsearch                         " hightlight matches
-"set clipboard=unnamedplus            " copy to clipboard
 set autoread
 set autowrite
-set colorcolumn=80,100
-set expandtab                       " Expand tab to spaces
-set autoindent                    	" Auto-indent new lines
-set smartindent	                    " Enable smart-indent
-set softtabstop=4	                  " Number of spaces per Tab
+set colorcolumn=100
+set expandtab                       " expand tab to spaces
+set autoindent                    	" auto-indent new lines
+set smartindent	                    " enable smart-indent
+set softtabstop=4	                  " number of spaces per Tab
 
-" Disable backup files
+" disable backup files
 set nobackup
 set nowb
 set noswapfile
 
-" Custom mapping
-nnoremap <leader><CR> :nohlsearch<CR>
-nmap <leader>w :w!<CR>          
-" nmap <F8> :TagbarToggle<CR>
 
-" Switching between windows
+"""""""""""""""""""""""
+" custom mapping
+"""""""""""""""""""""""
+let mapleader = "\<Space>"                          " change leader key to SPC
+nnoremap <Leader><CR> :nohlsearch<CR>               " turn off hightlight keywords
+nnoremap <Leader>w :w!<CR>                          " fast saving 
+nmap <F8> :TagbarToggle<CR>                         " toggle tagbar window
+
+" switching between windows
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-" deoplete config
+" copy and paste to system clipboard
+vmap <Leader>y "+y
+
+"""""""""""""""""""""""
+" package configuration
+"""""""""""""""""""""""
+" airline status line
+let g:airline_theme='sol'
+let g:airline_powerline_fonts = 1
+
+" deoplete
 let g:deoplete#enable_at_startup = 1
 
-" ctrlp config
+" ctrlp
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip            " MacOSX/Linux
-let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+" use a custom file listing command
+let g:ctrlp_user_command = 'find %s -type f'       
+" ignore files
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip            
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn)$',
   \ 'file': '\v\.(exe|so|dll)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
+nnoremap <Leader>o :CtrlP<CR>                       " bind <Leader>o to execute ctrlp
 
-" The Silver Searcher
+" ack.vim
 if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-
-  " override grep to use ag command
-  let g:ackprg = 'ag --nogroup --nocolor --column'
+  set grepprg=ag\ --nogroup\ --nocolor              " use The Silver Searcher(ag) over grep
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_use_caching = 0                       " ag is fast enough that CtrlP doesn't need to cache
+  let g:ackprg = 'ag --nogroup --nocolor --column'  " override grep to use ag command
 endif
-" bind K to grep word under cursor
-nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-" bind \ (backward slash) to grep shortcut
-" command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-" Stop jumping to the first result automatically.
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>       " bind K to search word under cursor 
 cnoreabbrev Ack Ack!
-nnoremap <Leader>f :Ack!<Space>
+nnoremap <Leader>s :Ack!<Space>
 
