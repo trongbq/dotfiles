@@ -21,13 +21,11 @@ Plug 'mileszs/ack.vim'
 Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
-
 """""""""""""""""""""""
 " Essential settings
 """""""""""""""""""""""
 colorscheme railscasts
 filetype plugin indent on            " load filetype-specific ident files
-set number                           " enable line number
 set cursorline                       " highlight current line
 set tabstop=2                        " number of visual spaces per TAB
 set softtabstop=2                    " number of spaces in tab when editing
@@ -40,22 +38,33 @@ set incsearch                        " search as characters are entered
 set hlsearch                         " hightlight matches
 set autoread
 set autowrite
-set colorcolumn=100
 set expandtab                       " expand tab to spaces
 set autoindent                    	" auto-indent new lines
 set smartindent	                    " enable smart-indent
 set softtabstop=4	                  " number of spaces per Tab
+set showcmd                         " show imcomplete command
+
+set tags=tags;/                     " check tags file and go to uppper level if needed
+
+" numbers
+set number
+set numberwidth=5
+
+" make it obvious where 100 characters is
+set textwidth=100
+set colorcolumn=+1
 
 " disable backup files
 set nobackup
-set nowb
+set nowritebackup 
 set noswapfile
 
 
 """""""""""""""""""""""
 " custom mapping
 """""""""""""""""""""""
-let mapleader = "\<Space>"                          " change leader key to SPC
+let mapleader = " "
+
 nnoremap <Leader><CR> :nohlsearch<CR>               " turn off hightlight keywords
 nnoremap <Leader>w :w!<CR>                          " fast saving 
 nmap <F8> :TagbarToggle<CR>                         " toggle tagbar window
@@ -78,6 +87,11 @@ let g:airline_powerline_fonts = 1
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+    return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+endfunction
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " ctrlp
 let g:ctrlp_map = '<c-p>'
@@ -92,7 +106,8 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(exe|so|dll)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
-nnoremap <Leader>o :CtrlP<CR>                       " bind <Leader>o to execute ctrlp
+nnoremap <Leader>o :CtrlP<CR> 
+nnoremap <Leader>. :CtrlPTag<CR>
 
 " ack.vim
 if executable('ag')
