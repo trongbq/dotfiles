@@ -77,6 +77,11 @@ map <C-l> <C-w>l
 
 " copy and paste to system clipboard
 vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
 
 """""""""""""""""""""""
 " package configuration
