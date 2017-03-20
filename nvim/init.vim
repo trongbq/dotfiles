@@ -19,6 +19,8 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'mileszs/ack.vim'
 " autopair gentle
 Plug 'jiangmiao/auto-pairs'
+" git wrapper: vim-fugitive
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 """""""""""""""""""""""
@@ -26,13 +28,14 @@ call plug#end()
 """""""""""""""""""""""
 colorscheme railscasts
 filetype plugin indent on            " load filetype-specific ident files
+set cursorcolumn                     " highlight current column
 set cursorline                       " highlight current line
 set tabstop=2                        " number of visual spaces per TAB
 set softtabstop=2                    " number of spaces in tab when editing
 set autoindent	                     " auto-indent new lines
 set shiftwidth=2                   	 " number of auto-indent spaces
 set smartindent                      " enable smart-indent
-set smarttab	                       " enable smart-tabs
+set smarttab                       " enable smart-tabs
 set showmatch                        " highlight matching [{()}]
 set incsearch                        " search as characters are entered
 set hlsearch                         " hightlight matches
@@ -40,8 +43,8 @@ set autoread
 set autowrite
 set expandtab                       " expand tab to spaces
 set autoindent                    	" auto-indent new lines
-set smartindent	                    " enable smart-indent
-set softtabstop=4	                  " number of spaces per Tab
+set smartindent                    " enable smart-indent
+set softtabstop=4                  " number of spaces per Tab
 set showcmd                         " show imcomplete command
 
 set tags=tags;/                     " check tags file and go to uppper level if needed
@@ -58,6 +61,7 @@ set colorcolumn=+1
 set nobackup
 set nowritebackup 
 set noswapfile
+set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace
 
 
 """""""""""""""""""""""
@@ -65,9 +69,9 @@ set noswapfile
 """""""""""""""""""""""
 let mapleader = " "
 
-nnoremap <Leader><CR> :nohlsearch<CR>               " turn off hightlight keywords
-nnoremap <Leader>w :w!<CR>                          " fast saving 
-nmap <F8> :TagbarToggle<CR>                         " toggle tagbar window
+nnoremap <Leader><CR> :nohlsearch<CR>
+nnoremap <Leader>w :w!<CR>
+nmap <F8> :TagbarToggle<CR>
 
 " switching between windows
 map <C-h> <C-w>h
@@ -82,6 +86,16 @@ nmap <Leader>p "+p
 nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
+
+" recall commands from history
+cnoremap <C-p> <Up>
+cnoremap <C-p> <Down>
+
+" quickly traverse Vim's lists
+nnoremap <silent> [b :bprevious<CR>
+nnoremap <silent> ]b :bnext<C>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
 
 """""""""""""""""""""""
 " package configuration
