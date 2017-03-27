@@ -270,3 +270,5 @@ nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>       " bind K to search word unde
 cnoreabbrev Ack Ack!
 nnoremap <Leader>s :Ack!<Space>
 
+" Fix ambigous command with `emmet`
+command! E Explore
