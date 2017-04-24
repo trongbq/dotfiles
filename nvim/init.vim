@@ -2,35 +2,28 @@
 " Plugins management
 """"""""""""""""""""
 call plug#begin('~/.config/nvim/plugged')
-" status line
 Plug 'itchyny/lightline.vim'
-" railscast theme
 Plug 'jpo/vim-railscasts-theme'
-" tagbar
-Plug 'majutsushi/tagbar'
-" deoplete for auto completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" fuzzy files searching 
 Plug 'ctrlpvim/ctrlp.vim'
-" multicursors
 Plug 'terryma/vim-multiple-cursors'
-" ack.vim
 Plug 'mileszs/ack.vim'
-" autopair gentle
 Plug 'jiangmiao/auto-pairs'
-" git wrapper: vim-fugitive
 Plug 'tpope/vim-fugitive'
-" emmet for vim
 Plug 'mattn/emmet-vim'
-" identation
 Plug 'Yggdroot/indentLine'
+Plug 'vim-syntastic/syntastic'
+Plug 'easymotion/vim-easymotion'
+Plug 'morhetz/gruvbox'
 call plug#end()
 
 """""""""""""""""""""""
 " Essential settings
 """""""""""""""""""""""
-colorscheme railscasts
-set guifont=Monaco:h14
+colorscheme gruvbox
+set background=dark
+set termguicolors
+
 filetype plugin indent on            " load filetype-specific ident files
 set cursorcolumn                     " highlight current column
 set cursorline                       " highlight current line
@@ -39,17 +32,18 @@ set softtabstop=2                    " number of spaces in tab when editing
 set autoindent	                     " auto-indent new lines
 set shiftwidth=2                   	 " number of auto-indent spaces
 set smartindent                      " enable smart-indent
-set smarttab                       " enable smart-tabs
+set smarttab                         " enable smart-tabs
 set showmatch                        " highlight matching [{()}]
 set incsearch                        " search as characters are entered
 set hlsearch                         " hightlight matches
 set autoread
 set autowrite
 set expandtab                       " expand tab to spaces
-set autoindent                    	" auto-indent new lines
-set smartindent                    " enable smart-indent
-set softtabstop=4                  " number of spaces per Tab
+set autoindent                      " auto-indent new lines
+set smartindent                     " enable smart-indent
+set softtabstop=4                   " number of spaces per Tab
 set showcmd                         " show imcomplete command
+set re=1                            " setting regex serch
 
 set tags=tags;/                     " check tags file and go to uppper level if needed
 
@@ -67,11 +61,11 @@ set nowritebackup
 set noswapfile
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace
 
-
 """""""""""""""""""""""
 " custom mapping
 """""""""""""""""""""""
 let mapleader = " "
+let maplocalleader = "\\"
 
 nnoremap <Leader><CR> :nohlsearch<CR>
 nnoremap <Leader>w :w!<CR>
@@ -97,7 +91,7 @@ cnoremap <C-p> <Down>
 
 " quickly traverse Vim's lists
 nnoremap <silent> [b :bprevious<CR>
-nnoremap <silent> ]b :bnext<C>
+nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
 
@@ -257,7 +251,7 @@ let g:ctrlp_custom_ignore = {
   \ 'link': 'some_bad_symbolic_links',
   \ }
 nnoremap <Leader>o :CtrlP<CR> 
-nnoremap <Leader>. :CtrlPTag<CR>
+nnoremap <Leader>b :CtrlPBuffer<CR>
 
 " ack.vim
 if executable('ag')
@@ -269,6 +263,16 @@ endif
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>       " bind K to search word under cursor 
 cnoreabbrev Ack Ack!
 nnoremap <Leader>s :Ack!<Space>
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_ruby_checkers = ['rubocop']
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+nnoremap <C-c>r :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 
 " Fix ambigous command with `emmet`
 command! E Explore
