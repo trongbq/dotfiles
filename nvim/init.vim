@@ -17,6 +17,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'morhetz/gruvbox'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'junegunn/goyo.vim'
 call plug#end()
 
 """""""""""""""""""""""
@@ -40,12 +41,13 @@ set incsearch                        " search as characters are entered
 set hlsearch                         " hightlight matches
 set autoread
 set autowrite
-set expandtab                       " expand tab to spaces
-set autoindent                      " auto-indent new lines
-set smartindent                     " enable smart-indent
-set softtabstop=4                   " number of spaces per Tab
-set showcmd                         " show imcomplete command
-set re=1                            " setting regex serch
+set expandtab                        " expand tab to spaces
+set autoindent                       " auto-indent new lines
+set smartindent                      " enable smart-indent
+set softtabstop=4                    " number of spaces per Tab
+set showcmd                          " show imcomplete command
+set re=1                             " setting regex serch
+set foldenable                       " enable folding
 
 set tags=tags;/                     " check tags file and go to uppper level if needed
 
