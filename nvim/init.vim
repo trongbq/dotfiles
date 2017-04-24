@@ -15,6 +15,8 @@ Plug 'Yggdroot/indentLine'
 Plug 'vim-syntastic/syntastic'
 Plug 'easymotion/vim-easymotion'
 Plug 'morhetz/gruvbox'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 call plug#end()
 
 """""""""""""""""""""""
@@ -70,6 +72,8 @@ let maplocalleader = "\\"
 nnoremap <Leader><CR> :nohlsearch<CR>
 nnoremap <Leader>w :w!<CR>
 nmap <F8> :TagbarToggle<CR>
+
+nmap <C-[> :pop<CR>
 
 " switching between windows
 map <C-h> <C-w>h
@@ -236,6 +240,12 @@ function! s:my_cr_function()
     return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
 endfunction
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+call deoplete#custom#set('ultisnips', 'matchers', ['matcher_fuzzy'])
+
+" UltiSnip
+let g:UltiSnipsExpandTrigger='<A-j>'
+let g:UltiSnipsJumpForwardTrigger='<A-l>'
+let g:UltiSnipsJumpBackwardTrigger='<A-h>'
 
 " ctrlp
 let g:ctrlp_map = '<c-p>'
