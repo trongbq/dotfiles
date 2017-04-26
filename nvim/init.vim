@@ -18,6 +18,7 @@ Plug 'morhetz/gruvbox'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/goyo.vim'
+Plug 'majutsushi/tagbar'
 call plug#end()
 
 """""""""""""""""""""""
@@ -73,9 +74,6 @@ let maplocalleader = "\\"
 
 nnoremap <Leader><CR> :nohlsearch<CR>
 nnoremap <Leader>w :w!<CR>
-nmap <F8> :TagbarToggle<CR>
-
-nmap <C-[> :pop<CR>
 
 " switching between windows
 map <C-h> <C-w>h
@@ -93,7 +91,7 @@ vmap <Leader>P "+P
 
 " recall commands from history
 cnoremap <C-p> <Up>
-cnoremap <C-p> <Down>
+cnoremap <C-n> <Down>
 
 " quickly traverse Vim's lists
 nnoremap <silent> [b :bprevious<CR>
@@ -104,6 +102,9 @@ nnoremap <silent> ]B :blast<CR>
 """""""""""""""""""""""
 " package configuration
 """""""""""""""""""""""
+" tagbar
+nmap <F8> :TagbarToggle<CR>
+
 " lightline status line""""""""""""""""""""""""""""""
 let g:lightline = {
       \ 'colorscheme': 'default',
@@ -280,11 +281,11 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 let g:syntastic_ruby_checkers = ['rubocop']
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-nnoremap <C-c>r :SyntasticCheck<CR> :SyntasticToggleMode<CR>
+nnoremap <F7> :SyntasticCheck<CR>
 
 " Fix ambigous command with `emmet`
 command! E Explore
