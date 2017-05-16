@@ -14,7 +14,6 @@ Plug 'mattn/emmet-vim'
 Plug 'Yggdroot/indentLine'
 Plug 'vim-syntastic/syntastic'
 Plug 'easymotion/vim-easymotion'
-Plug 'morhetz/gruvbox'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/goyo.vim'
@@ -24,9 +23,7 @@ call plug#end()
 """""""""""""""""""""""
 " Essential settings
 """""""""""""""""""""""
-colorscheme gruvbox
-set background=dark
-set termguicolors
+colorscheme railscasts
 
 filetype plugin indent on            " load filetype-specific ident files
 set cursorcolumn                     " highlight current column
@@ -74,6 +71,7 @@ let maplocalleader = "\\"
 
 nnoremap <Leader><CR> :nohlsearch<CR>
 nnoremap <Leader>w :w!<CR>
+nnoremap <Leader>n :tabe<CR>
 
 " switching between windows
 map <C-h> <C-w>h
