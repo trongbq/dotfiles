@@ -4,34 +4,35 @@
 call plug#begin('~/.config/nvim/plugged')
 Plug 'itchyny/lightline.vim'
 Plug 'jpo/vim-railscasts-theme'
+Plug 'reedes/vim-colors-pencil'
+Plug 'AlessandroYorba/Sierra'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'mileszs/ack.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug 'mattn/emmet-vim'
 Plug 'Yggdroot/indentLine'
 Plug 'vim-syntastic/syntastic'
-Plug 'easymotion/vim-easymotion'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'junegunn/goyo.vim'
 Plug 'majutsushi/tagbar'
 call plug#end()
 
 """""""""""""""""""""""
 " Essential settings
 """""""""""""""""""""""
-colorscheme railscasts
+set background=dark
+colorscheme pencil
 
 filetype plugin indent on            " load filetype-specific ident files
-set cursorcolumn                     " highlight current column
 set cursorline                       " highlight current line
 set tabstop=2                        " number of visual spaces per TAB
 set softtabstop=2                    " number of spaces in tab when editing
-set autoindent	                     " auto-indent new lines
-set shiftwidth=2                   	 " number of auto-indent spaces
+set autoindent                       " auto-indent new lines
+set shiftwidth=2                     " number of auto-indent spaces
 set smartindent                      " enable smart-indent
 set smarttab                         " enable smart-tabs
 set showmatch                        " highlight matching [{()}]
@@ -47,7 +48,7 @@ set showcmd                          " show imcomplete command
 set re=1                             " setting regex serch
 set foldenable                       " enable folding
 
-set tags=tags;/                     " check tags file and go to uppper level if needed
+set tags=tags;/                      " check tags file and go to uppper level if needed
 
 " numbers
 set number
