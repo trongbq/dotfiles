@@ -2,10 +2,10 @@
 " Plugins management
 """"""""""""""""""""
 call plug#begin('~/.config/nvim/plugged')
-Plug 'itchyny/lightline.vim'
 Plug 'jpo/vim-railscasts-theme'
 Plug 'reedes/vim-colors-pencil'
 Plug 'AlessandroYorba/Sierra'
+Plug 'itchyny/lightline.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'terryma/vim-multiple-cursors'
@@ -15,10 +15,13 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'mattn/emmet-vim'
 Plug 'Yggdroot/indentLine'
-Plug 'vim-syntastic/syntastic'
+Plug 'neomake/neomake'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'majutsushi/tagbar'
+Plug 'tpope/vim-surround'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 call plug#end()
 
 """""""""""""""""""""""
@@ -265,7 +268,7 @@ let g:ctrlp_custom_ignore = {
 nnoremap <Leader>o :CtrlP<CR> 
 nnoremap <Leader>b :CtrlPBuffer<CR>
 
-" ack.vim
+" ack.vimu
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor              " use The Silver Searcher(ag) over grep
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
@@ -276,15 +279,16 @@ nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>       " bind K to search word unde
 cnoreabbrev Ack Ack!
 nnoremap <Leader>s :Ack!<Space>
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_ruby_checkers = ['rubocop']
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-nnoremap <F7> :SyntasticCheck<CR>
+let g:neomake_javascript_jshint_maker = {
+    \ 'args': ['--verbose'],
+    \ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
+    \ }
+let g:neomake_javascript_enabled_makers = ['jshint']
+let g:neomake_ruby_enabled_makers = ['rubocop']
+nnoremap <F7> :Neomake<CR>
+
+" Enable jsx syntax for js files
+let g:jsx_ext_required = 0
 
 " Fix ambigous command with `emmet`
 command! E Explore
