@@ -29,9 +29,6 @@ font pango:monospace 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
-
 # control focused window when follows the mouse movements
 focus_follows_mouse no
 
@@ -90,7 +87,7 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+bindsym $mod+c focus child
 
 # set popups during fullscreen mode
 popup_during_fullscreen smart
@@ -105,33 +102,25 @@ bindsym $mod+t border normal    0
 bindsym $mod+y border pixel     1
 bindsym $mod+u border none
 
-# customize workspace name
-set $WS1  "1:   Terminal"
-set $WS2  "2:   Browser"
-set $WS3  "3:   Documents"
-set $WS4  "4:   Media"
-set $WS5  "5:   Chat"
-set $WS6  "6:   General"
-
 # switch to workspace
-bindsym $mod+1 workspace $WS1
-bindsym $mod+2 workspace $WS2
-bindsym $mod+3 workspace $WS3
-bindsym $mod+4 workspace $WS4
-bindsym $mod+5 workspace $WS5
-bindsym $mod+6 workspace $WS6
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $WS1
-bindsym $mod+Shift+2 move container to workspace $WS2
-bindsym $mod+Shift+3 move container to workspace $WS3
-bindsym $mod+Shift+4 move container to workspace $WS4
-bindsym $mod+Shift+5 move container to workspace $WS5
-bindsym $mod+Shift+6 move container to workspace $WS6
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
@@ -142,14 +131,15 @@ bindsym $mod+F3 workspace $WS2; exec chromium-browser
 bindsym $mod+F4 workspace $WS3; exec nautilus
 
 # assign program to workspace
-assign [class="terminal"]           → $WS1
-assign [class="Chromium"]           → $WS2
-assign [class="Nautilus"]           → $WS3
+assign [class="Chromium"] 2
+assign [class="Nautilus"] 3
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
+
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
+
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
@@ -161,10 +151,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
         bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym j resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -187,27 +177,32 @@ client.urgent           #2F343A #D64E4E #FFFFFF #D64E4E
 client.placeholder      #212121 #0C0C0C #FFFFFF #212121
 client.background       #212121
 
-bar {
-    status_command i3blocks -c ~/.config/i3/i3blocks.conf
-    tray_output             primary
-    position                bottom
-    strip_workspace_numbers yes
-    separator_symbol        "·"
-    workspace_buttons       yes
-
-    colors {
-            background  #212121
-            statusline  #DDDDDD
-            separator   #666666
-            # class             border  backgr. text
-            focused_workspace   #2B83A6 #2B83A6 #FFFFFF
-            active_workspace    #212121 #212121 #FFFFFF
-            inactive_workspace  #212121 #212121 #86888C
-            urgent_workspace    #2F343A #D64E4E #FFFFFF
-      }
-}
+#bar {
+#    status_command i3blocks -c ~/.config/i3/i3blocks.conf
+#    tray_output             primary
+#    position                top
+#    strip_workspace_numbers yes
+#    separator_symbol        "·"
+#    workspace_buttons       yes
+#
+#    colors {
+#            background  #212121
+#            statusline  #DDDDDD
+#            separator   #666666
+#            # class             border  backgr. text
+#            focused_workspace   #2B83A6 #2B83A6 #FFFFFF
+#            active_workspace    #212121 #212121 #FFFFFF
+#            inactive_workspace  #212121 #212121 #86888C
+#            urgent_workspace    #2F343A #D64E4E #FFFFFF
+#      }
+#}
 
 # enable natural scrolling
 exec --no-startup-id synclient HorizEdgeScroll=1 VertEdgeScroll=1 VertScrollDelta=-111
 
-setxkbmap -option caps:swapescape
+bindsym $mod+Ctrl+l exec $HOME/.config/i3/scripts/lock.sh
+
+exec --no-startup-id $HOME/.config/i3/scripts/polybar.sh
+
+exec_always xmodmap -e "clear lock" #disable caps lock switch
+exec_always xmodmap -e "keysym Caps_Lock = Control_L" #set caps_lock as escape
