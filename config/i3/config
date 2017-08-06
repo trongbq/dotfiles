@@ -227,6 +227,8 @@ exec --no-startup-id synclient HorizEdgeScroll=1 VertEdgeScroll=1 VertScrollDelt
 
 bindsym $mod+Ctrl+l exec $HOME/.config/i3/scripts/lock.sh
 
+exec xautolock -detectsleep -time 1 -locker "$HOME/.config/i3/scripts/lock.sh" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'LOCKING screen in 30 seconds'"
+
 exec_always xmodmap -e "clear lock" #disable caps lock switch
 exec_always xmodmap -e "keysym Caps_Lock = Escape" #set caps_lock as escape
 
