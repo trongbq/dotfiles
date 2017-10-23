@@ -59,15 +59,6 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -87,6 +78,9 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias f="fortune"
+alias fc="fortune | cowsay"
+alias fp="fortune | ponysay"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -96,14 +90,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_prompt
-fi
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -116,3 +102,47 @@ if ! shopt -oq posix; then
   fi
 fi
 
+
+# PS1 configuration
+COLOR_BLACK="\e[1;30m"
+COLOR_RED="\e[1;31m"
+COLOR_GREEN="\e[1;32m"
+COLOR_YELLOW="\e[1;33m"
+COLOR_BLUE="\e[1;34m"
+COLOR_PURPLE="\e[1;35m"
+COLOR_CYAN="\e[1;36m"
+COLOR_WHITE="\e[1;37m"
+COLOR_RESET="\e[0m"
+function git_branch {
+  local git_status="$(git status 2> /dev/null)"
+  local on_branch="On branch ([^${IFS}]*)"
+  local on_commit="HEAD detached at ([^${IFS}]*)"
+
+  if [[ "$git_status" =~ $on_branch ]]; then
+    local branch=${BASH_REMATCH[1]}
+    echo "$branch"
+  elif [[ "$git_status" =~ $on_commit ]]; then
+    local commit=${BASH_REMATCH[1]}
+    echo "$commit"
+  else
+    echo
+  fi
+}
+function git_decor {
+  if [[ $(git_branch) ]]; then
+    echo " on $(git_branch)"
+  fi
+}
+PS1="\[$COLOR_PURPLE\]\W"
+PS1+="\[$COLOR_CYAN\]\$(git_decor)"
+PS1+=" \[$COLOR_PURPLE\]❱\[$COLOR_CYAN\]❱\[$COLOR_BLUE\]❱ \[$COLOR_RESET\]"
+export PS1
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+alias stpixta="ssh pixtavietnam-developers-trongbui@52.199.189.169"
+export PYTHONPATH=/opt/cat-dogs/repo/caffe/python:
+
+# added by travis gem
+[ -f /home/trongbui/.travis/travis.sh ] && source /home/trongbui/.travis/travis.sh

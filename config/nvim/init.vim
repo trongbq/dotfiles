@@ -3,7 +3,7 @@
 """"""""""""""""""""
 call plug#begin('~/.config/nvim/plugged')
 Plug 'jpo/vim-railscasts-theme'
-Plug 'reedes/vim-colors-pencil'
+Plug 'morhetz/gruvbox'
 Plug 'AlessandroYorba/Sierra'
 Plug 'itchyny/lightline.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -22,13 +22,15 @@ Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-surround'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
+Plug 'fatih/vim-go'
 call plug#end()
 
 """""""""""""""""""""""
 " Essential settings
 """""""""""""""""""""""
 set background=dark
-colorscheme pencil
+colorscheme gruvbox
+hi Normal guibg=NONE ctermbg=NONE
 
 filetype plugin indent on            " load filetype-specific ident files
 set cursorline                       " highlight current line
@@ -41,17 +43,16 @@ set smarttab                         " enable smart-tabs
 set showmatch                        " highlight matching [{()}]
 set incsearch                        " search as characters are entered
 set hlsearch                         " hightlight matches
-set autoread
-set autowrite
 set expandtab                        " expand tab to spaces
 set autoindent                       " auto-indent new lines
 set smartindent                      " enable smart-indent
-set softtabstop=4                    " number of spaces per Tab
+set softtabstop=2                    " number of spaces per Tab
 set showcmd                          " show imcomplete command
 set re=1                             " setting regex serch
-set foldenable                       " enable folding
-
+"set foldenable                       " enable folding
 set tags=tags;/                      " check tags file and go to uppper level if needed
+set tw=0                             " disable long line auto broken
+set nowrap                           " disable auto-wrapping
 
 " numbers
 set number
@@ -229,7 +230,6 @@ augroup AutoSyntastic
   autocmd BufWritePost *.c,*.cpp call s:syntastic()
 augroup END
 function! s:syntastic()
-  SyntasticCheck
   call lightline#update()
 endfunction
 
