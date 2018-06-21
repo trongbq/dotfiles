@@ -7,8 +7,17 @@
 (load custom-file 'noerror)
 
 (add-to-list 'load-path (expand-file-name "personal" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "extentions" user-emacs-directory))
 
 (let ((files (directory-files-and-attributes "~/.emacs.d/personal" t)))
+  (dolist (file files)
+    (let ((filename (car file))
+	  (dir (nth 1 file)))
+      (when (and dir
+		 (not (string-suffix-p "." filename)))
+	(add-to-list 'load-path (car file))))))
+
+(let ((files (directory-files-and-attributes "~/.emacs.d/extentions" t)))
   (dolist (file files)
     (let ((filename (car file))
 	  (dir (nth 1 file)))
@@ -24,3 +33,8 @@
 (require 'init-font)
 (require 'init-platform)
 (require 'init-package)
+(require 'highlight-indentation)
+
+(add-hook 'python-mode-hook 'highlight-indentation-mode)
+(add-hook 'ruby-mode-hook 'highlight-indentation-mode)
+(add-hook 'js-mode-hook 'highlight-indentation-mode)

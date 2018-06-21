@@ -65,5 +65,9 @@
     (global-auto-complete-mode t)
     ))
 
+(use-package magit
+  :ensure t
+  :init)
+
 (provide 'init-package)
 ;;; init-package.el ends here
