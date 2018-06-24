@@ -1,10 +1,8 @@
-""""""""""""""""""""
-" Plugins management
-""""""""""""""""""""
+" ---------- Plugins ----------
+
 call plug#begin('~/.config/nvim/plugged')
 Plug 'jpo/vim-railscasts-theme'
 Plug 'morhetz/gruvbox'
-Plug 'AlessandroYorba/Sierra'
 Plug 'itchyny/lightline.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'ctrlpvim/ctrlp.vim'
@@ -22,18 +20,14 @@ Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-surround'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
-Plug 'fatih/vim-go'
+Plug 'vim-ruby/vim-ruby'
+Plug '/tpope/vim-rails'
 call plug#end()
 
-"""""""""""""""""""""""
-" Essential settings
-"""""""""""""""""""""""
-set background=dark
-colorscheme gruvbox
-hi Normal guibg=NONE ctermbg=NONE
+" ---------- General settings ----------
 
 filetype plugin indent on            " load filetype-specific ident files
-set cursorline                       " highlight current line
+syntax on                            "Turn on syntax highlighting
 set tabstop=2                        " number of visual spaces per TAB
 set softtabstop=2                    " number of spaces in tab when editing
 set autoindent                       " auto-indent new lines
@@ -43,24 +37,17 @@ set smarttab                         " enable smart-tabs
 set showmatch                        " highlight matching [{()}]
 set incsearch                        " search as characters are entered
 set hlsearch                         " hightlight matches
+set autoread
+set autowrite
 set expandtab                        " expand tab to spaces
 set autoindent                       " auto-indent new lines
 set smartindent                      " enable smart-indent
-set softtabstop=2                    " number of spaces per Tab
+set softtabstop=4                    " number of spaces per Tab
 set showcmd                          " show imcomplete command
 set re=1                             " setting regex serch
-"set foldenable                       " enable folding
+set foldenable                       " enable folding
+
 set tags=tags;/                      " check tags file and go to uppper level if needed
-set tw=0                             " disable long line auto broken
-set nowrap                           " disable auto-wrapping
-
-" numbers
-set number
-set numberwidth=5
-
-" make it obvious where 100 characters is
-set textwidth=100
-set colorcolumn=+1
 
 " disable backup files
 set nobackup
@@ -68,17 +55,45 @@ set nowritebackup
 set noswapfile
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace
 
-"""""""""""""""""""""""
-" custom mapping
-"""""""""""""""""""""""
+" ---------- Visual settings ----------
+
+colorscheme gruvbox
+set background=dark
+set cursorline                       " highlight current line
+
+set number
+set numberwidth=5
+
+" make it obvious where 100 characters is
+set textwidth=100
+set colorcolumn=+1
+
+" Folding
+autocmd FileType java setlocal foldmethod=syntax
+autocmd FileType python setlocal foldmethod=indent
+autocmd FileType javascript setlocal foldmethod=syntax
+autocmd FileType elixir setlocal foldmethod=syntax
+autocmd FileType ruby setlocal foldmethod=syntax
+autocmd FileType css setlocal foldmethod=indent shiftwidth=2 tabstop=2
+" autocmd FileType html setlocal foldmethod=syntax shiftwidth=2 tabstop=2
+autocmd FileType html setlocal foldmethod=manual shiftwidth=2 tabstop=2
+set foldlevelstart=20                    "start level 20 should result in folds open by default
+
+" ---------- custom mapping ----------
+
 let mapleader = " "
 let maplocalleader = "\\"
 
 nnoremap <Leader><CR> :nohlsearch<CR>
-nnoremap <Leader>w :w!<CR>
-nnoremap <Leader>n :tabe<CR>
 
-" switching between windows
+" open file
+nnoremap <Leader>w :w!<CR>
+nnoremap <Leader>t :tabe 
+nnoremap <Leader>n :tabe<CR>
+nnoremap <Leader>c :E<CR>
+nnoremap <Leader>e :e 
+
+" switch between windows
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
@@ -101,6 +116,8 @@ nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
+
+map <Leader>r :so $MYVIMRC<CR>
 
 """""""""""""""""""""""
 " package configuration
@@ -230,6 +247,7 @@ augroup AutoSyntastic
   autocmd BufWritePost *.c,*.cpp call s:syntastic()
 augroup END
 function! s:syntastic()
+  SyntasticCheck
   call lightline#update()
 endfunction
 
@@ -292,3 +310,11 @@ let g:jsx_ext_required = 0
 
 " Fix ambigous command with `emmet`
 command! E Explore
+
+let g:user_emmet_leader_key='<C-m>'
+
+let g:user_emmet_settings = {
+  \  'javascript.jsx' : {
+    \      'extends' : 'jsx',
+    \  },
+  \}
