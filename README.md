@@ -1,1 +1,1 @@
-#### Dotfiles of my machine
+#### Dotfiles for my machine
