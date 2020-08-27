@@ -1,31 +1,24 @@
-" ---------- Plugins ----------
-
 call plug#begin('~/.config/nvim/plugged')
-Plug 'jpo/vim-railscasts-theme'
-Plug 'morhetz/gruvbox'
-Plug 'itchyny/lightline.vim'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'terryma/vim-multiple-cursors'
-Plug 'mileszs/ack.vim'
-Plug 'jiangmiao/auto-pairs'
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive' "Fugitive is the premier Vim plugin for Git
+Plug 'sheerun/vim-polyglot' "A collection of language packs for Vim
+Plug 'neoclide/coc.nvim', {'branch': 'release'} "Intellisense engine
+Plug 'scrooloose/nerdtree' "A tree explorer plugin for vim
+Plug 'itchyny/lightline.vim' "A light and configurable statusline/tabline plugin for Vim
+Plug 'easymotion/vim-easymotion'
+Plug 'unkiwii/vim-nerdtree-sync' " Vim plugin for synchronizing current open file with NERDtree
+Plug 'tpope/vim-surround' " The plugin provides mappings to easily delete, change and add such surroundings in pairs.
+Plug 'jiangmiao/auto-pairs' "Insert or delete brackets, parens, quotes in pair.
+Plug 'scrooloose/nerdcommenter' " Comment code
+Plug 'mg979/vim-visual-multia' "Multiple cursors plugin
+Plug 'eugen0329/vim-esearch' "Perform search in files easily
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "A command-line fuzzy finder
+Plug 'junegunn/fzf.vim'
+Plug 'Yggdroot/indentLine' "A vim plugin to display the indention levels with thin vertical lines
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'airblade/vim-gitgutter'
-Plug 'mattn/emmet-vim'
-Plug 'Yggdroot/indentLine'
-Plug 'neomake/neomake'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'majutsushi/tagbar'
-Plug 'tpope/vim-surround'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'vim-ruby/vim-ruby'
-Plug '/tpope/vim-rails'
 call plug#end()
 
-" ---------- General settings ----------
-
+" general settings
 filetype plugin indent on            " load filetype-specific ident files
 syntax on                            "Turn on syntax highlighting
 set tabstop=2                        " number of visual spaces per TAB
@@ -46,19 +39,23 @@ set softtabstop=4                    " number of spaces per Tab
 set showcmd                          " show imcomplete command
 set re=1                             " setting regex serch
 set foldenable                       " enable folding
+set encoding=UTF-8
+set hidden
+set mouse=a "enable mouse for all mode
+set ignorecase
+set relativenumber
 
-set tags=tags;/                      " check tags file and go to uppper level if needed
+" auto remove trailing spaces
+autocmd BufWritePre * %s/\s\+$//e
 
 " disable backup files
 set nobackup
-set nowritebackup 
+set nowritebackup
 set noswapfile
-set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace
+" set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace
 
-" ---------- Visual settings ----------
-
-colorscheme gruvbox
-set background=dark
+" visual settings
+colorscheme onehalfdark
 set cursorline                       " highlight current line
 
 set number
@@ -68,30 +65,34 @@ set numberwidth=5
 set textwidth=100
 set colorcolumn=+1
 
-" Folding
+" folding
+autocmd FileType go setlocal foldmethod=syntax
 autocmd FileType java setlocal foldmethod=syntax
-autocmd FileType python setlocal foldmethod=indent
+autocmd FileType python setlocal foldmethod=indent shiftwidth=4
 autocmd FileType javascript setlocal foldmethod=syntax
-autocmd FileType elixir setlocal foldmethod=syntax
 autocmd FileType ruby setlocal foldmethod=syntax
 autocmd FileType css setlocal foldmethod=indent shiftwidth=2 tabstop=2
 " autocmd FileType html setlocal foldmethod=syntax shiftwidth=2 tabstop=2
 autocmd FileType html setlocal foldmethod=manual shiftwidth=2 tabstop=2
 set foldlevelstart=20                    "start level 20 should result in folds open by default
 
-" ---------- custom mapping ----------
-
+" Custom mapping
 let mapleader = " "
 let maplocalleader = "\\"
+inoremap jk <ESC>
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+inoremap <C-e> <C-o>$
+inoremap <C-a> <C-o>^
 
 nnoremap <Leader><CR> :nohlsearch<CR>
 
 " open file
 nnoremap <Leader>w :w!<CR>
-nnoremap <Leader>t :tabe 
+nnoremap <Leader>t :tabe
 nnoremap <Leader>n :tabe<CR>
 nnoremap <Leader>c :E<CR>
-nnoremap <Leader>e :e 
+nnoremap <Leader>e :e
 
 " switch between windows
 map <C-h> <C-w>h
@@ -122,199 +123,39 @@ map <Leader>r :so $MYVIMRC<CR>
 """""""""""""""""""""""
 " package configuration
 """""""""""""""""""""""
-" tagbar
-nmap <F8> :TagbarToggle<CR>
+" FZF
+" Always enable preview window on the right with 60% width
+" ripgrep is required
+let g:fzf_preview_window = 'right:60%'
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
+nnoremap <silent> <Leader>o :Files<CR>
+nnoremap <silent> <Leader>f :Rg<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
 
-" lightline status line""""""""""""""""""""""""""""""
+" NERDTree
+map <C-a> :NERDTreeToggle<CR>
+let g:nerdtree_sync_cursorline = 1
+
+" NERDCommenter
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDDefaultAlign = 'left'
+
+" Esearch
+let g:esearch = {
+  \ 'adapter': 'rg',
+  \ 'backend': 'nvim'
+  \}
+
+" Lightline
 let g:lightline = {
-      \ 'colorscheme': 'default',
+      \ 'colorscheme': 'onehalfdark',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
-      \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
       \ },
       \ 'component_function': {
-      \   'fugitive': 'LightlineFugitive',
-      \   'filename': 'LightlineFilename',
-      \   'fileformat': 'LightlineFileformat',
-      \   'filetype': 'LightlineFiletype',
-      \   'fileencoding': 'LightlineFileencoding',
-      \   'mode': 'LightlineMode',
-      \   'ctrlpmark': 'CtrlPMark',
+      \   'gitbranch': 'FugitiveHead',
       \ },
-      \ 'component_expand': {
-      \   'syntastic': 'SyntasticStatuslineFlag',
-      \ },
-      \ 'component_type': {
-      \   'syntastic': 'error',
-      \ },
-      \ 'subseparator': { 'left': '|', 'right': '|' }
       \ }
 
-function! LightlineModified()
-  return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-endfunction
-
-function! LightlineReadonly()
-  return &ft !~? 'help' && &readonly ? 'RO' : ''
-endfunction
-
-function! LightlineFilename()
-  let fname = expand('%:t')
-  return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
-        \ fname == '__Tagbar__' ? g:lightline.fname :
-        \ fname =~ '__Gundo\|NERD_tree' ? '' :
-        \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
-        \ &ft == 'unite' ? unite#get_status_string() :
-        \ &ft == 'vimshell' ? vimshell#get_status_string() :
-        \ ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
-        \ ('' != fname ? fname : '[No Name]') .
-        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
-endfunction
-
-function! LightlineFugitive()
-  try
-    if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
-      let mark = ''  " edit here for cool mark
-      let branch = fugitive#head()
-      return branch !=# '' ? mark.branch : ''
-    endif
-  catch
-  endtry
-  return ''
-endfunction
-
-function! LightlineFileformat()
-  return winwidth(0) > 70 ? &fileformat : ''
-endfunction
-
-function! LightlineFiletype()
-  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-endfunction
-
-function! LightlineFileencoding()
-  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
-endfunction
-
-function! LightlineMode()
-  let fname = expand('%:t')
-  return fname == '__Tagbar__' ? 'Tagbar' :
-        \ fname == 'ControlP' ? 'CtrlP' :
-        \ fname == '__Gundo__' ? 'Gundo' :
-        \ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
-        \ fname =~ 'NERD_tree' ? 'NERDTree' :
-        \ &ft == 'unite' ? 'Unite' :
-        \ &ft == 'vimfiler' ? 'VimFiler' :
-        \ &ft == 'vimshell' ? 'VimShell' :
-        \ winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
-
-function! CtrlPMark()
-  if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
-    call lightline#link('iR'[g:lightline.ctrlp_regex])
-    return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
-          \ , g:lightline.ctrlp_next], 0)
-  else
-    return ''
-  endif
-endfunction
-
-let g:ctrlp_status_func = {
-  \ 'main': 'CtrlPStatusFunc_1',
-  \ 'prog': 'CtrlPStatusFunc_2',
-  \ }
-
-function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
-  let g:lightline.ctrlp_regex = a:regex
-  let g:lightline.ctrlp_prev = a:prev
-  let g:lightline.ctrlp_item = a:item
-  let g:lightline.ctrlp_next = a:next
-  return lightline#statusline(0)
-endfunction
-
-function! CtrlPStatusFunc_2(str)
-  return lightline#statusline(0)
-endfunction
-
-let g:tagbar_status_func = 'TagbarStatusFunc'
-
-function! TagbarStatusFunc(current, sort, fname, ...) abort
-    let g:lightline.fname = a:fname
-  return lightline#statusline(0)
-endfunction
-
-augroup AutoSyntastic
-  autocmd!
-  autocmd BufWritePost *.c,*.cpp call s:syntastic()
-augroup END
-function! s:syntastic()
-  SyntasticCheck
-  call lightline#update()
-endfunction
-
-let g:unite_force_overwrite_statusline = 0
-let g:vimfiler_force_overwrite_statusline = 0
-let g:vimshell_force_overwrite_statusline = 0
-"""""""""""""""""""""""""""""""""""""""""""""
-
-" deoplete
-let g:deoplete#enable_at_startup = 1
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-endfunction
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-call deoplete#custom#set('ultisnips', 'matchers', ['matcher_fuzzy'])
-
-" UltiSnip
-let g:UltiSnipsExpandTrigger='<A-j>'
-let g:UltiSnipsJumpForwardTrigger='<A-l>'
-let g:UltiSnipsJumpBackwardTrigger='<A-h>'
-
-" ctrlp
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-" use a custom file listing command
-let g:ctrlp_user_command = 'find %s -type f'       
-" ignore files
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip            
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
-nnoremap <Leader>o :CtrlP<CR> 
-nnoremap <Leader>b :CtrlPBuffer<CR>
-
-" ack.vimu
-if executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor              " use The Silver Searcher(ag) over grep
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_use_caching = 0                       " ag is fast enough that CtrlP doesn't need to cache
-  let g:ackprg = 'ag --nogroup --nocolor --column'  " override grep to use ag command
-endif
-nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>       " bind K to search word under cursor 
-cnoreabbrev Ack Ack!
-nnoremap <Leader>s :Ack!<Space>
-
-let g:neomake_javascript_jshint_maker = {
-    \ 'args': ['--verbose'],
-    \ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
-    \ }
-let g:neomake_javascript_enabled_makers = ['jshint']
-let g:neomake_ruby_enabled_makers = ['rubocop']
-nnoremap <F7> :Neomake<CR>
-
-" Enable jsx syntax for js files
-let g:jsx_ext_required = 0
-
-" Fix ambigous command with `emmet`
-command! E Explore
-
-let g:user_emmet_leader_key='<C-m>'
-
-let g:user_emmet_settings = {
-  \  'javascript.jsx' : {
-    \      'extends' : 'jsx',
-    \  },
-  \}
