@@ -9,7 +9,7 @@ Plug 'unkiwii/vim-nerdtree-sync' " Vim plugin for synchronizing current open fil
 Plug 'tpope/vim-surround' " The plugin provides mappings to easily delete, change and add such surroundings in pairs.
 Plug 'jiangmiao/auto-pairs' "Insert or delete brackets, parens, quotes in pair.
 Plug 'scrooloose/nerdcommenter' " Comment code
-Plug 'mg979/vim-visual-multia' "Multiple cursors plugin
+Plug 'mg979/vim-visual-multi' "Multiple cursors plugin
 Plug 'eugen0329/vim-esearch' "Perform search in files easily
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "A command-line fuzzy finder
 Plug 'junegunn/fzf.vim'
