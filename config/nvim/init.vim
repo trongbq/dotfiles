@@ -16,6 +16,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'Yggdroot/indentLine' "A vim plugin to display the indention levels with thin vertical lines
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'airblade/vim-gitgutter'
+Plug 'mzlogin/vim-markdown-toc'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 call plug#end()
 
 " general settings
@@ -62,7 +64,7 @@ set number
 set numberwidth=5
 
 " make it obvious where 100 characters is
-set textwidth=100
+set textwidth=80
 set colorcolumn=+1
 
 " folding
@@ -159,3 +161,14 @@ let g:lightline = {
       \ },
       \ }
 
+" markdown-preview.nvim
+let g:mkdp_refresh_slow = 1
+
+" indentLine
+let g:indentLine_setConceal = 2
+" default ''.
+" n for Normal mode
+" v for Visual mode
+" i for Insert mode
+" c for Command line editing, for 'incsearch'
+let g:indentLine_concealcursor = "nv"
