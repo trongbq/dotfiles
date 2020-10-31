@@ -1,100 +1,40 @@
 call plug#begin('~/.config/nvim/plugged')
-Plug 'tpope/vim-fugitive' "Fugitive is the premier Vim plugin for Git
-Plug 'sheerun/vim-polyglot' "A collection of language packs for Vim
-Plug 'neoclide/coc.nvim', {'branch': 'release'} "Intellisense engine
-Plug 'scrooloose/nerdtree' "A tree explorer plugin for vim
-Plug 'itchyny/lightline.vim' "A light and configurable statusline/tabline plugin for Vim
-Plug 'easymotion/vim-easymotion'
-Plug 'unkiwii/vim-nerdtree-sync' " Vim plugin for synchronizing current open file with NERDtree
-Plug 'tpope/vim-surround' " The plugin provides mappings to easily delete, change and add such surroundings in pairs.
-Plug 'jiangmiao/auto-pairs' "Insert or delete brackets, parens, quotes in pair.
-Plug 'scrooloose/nerdcommenter' " Comment code
-Plug 'mg979/vim-visual-multi' "Multiple cursors plugin
-Plug 'eugen0329/vim-esearch' "Perform search in files easily
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "A command-line fuzzy finder
+Plug 'morhetz/gruvbox'
+Plug 'itchyny/lightline.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'unkiwii/vim-nerdtree-sync'
+Plug 'Yggdroot/indentLine'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'Yggdroot/indentLine' "A vim plugin to display the indention levels with thin vertical lines
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
-Plug 'airblade/vim-gitgutter'
-Plug 'mzlogin/vim-markdown-toc'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'scrooloose/nerdcommenter'
+Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
-" general settings
-filetype plugin indent on            " load filetype-specific ident files
-syntax on                            "Turn on syntax highlighting
-set tabstop=2                        " number of visual spaces per TAB
-set softtabstop=2                    " number of spaces in tab when editing
-set autoindent                       " auto-indent new lines
-set shiftwidth=2                     " number of auto-indent spaces
-set smartindent                      " enable smart-indent
-set smarttab                         " enable smart-tabs
-set showmatch                        " highlight matching [{()}]
-set incsearch                        " search as characters are entered
-set hlsearch                         " hightlight matches
-set autoread
-set autowrite
-set expandtab                        " expand tab to spaces
-set autoindent                       " auto-indent new lines
-set smartindent                      " enable smart-indent
-set softtabstop=4                    " number of spaces per Tab
-set showcmd                          " show imcomplete command
-set re=1                             " setting regex serch
-set foldenable                       " enable folding
-set encoding=UTF-8
-set hidden
-set mouse=a "enable mouse for all mode
-set ignorecase
-set relativenumber
+" visual
+set background=dark
+colorscheme gruvbox
+set cursorline				" highlight current line
+set nu					" enable line numbers
 
-" auto remove trailing spaces
-autocmd BufWritePre * %s/\s\+$//e
+" filetype
+filetype on 				" detect files based on type
+filetype plugin on			" when a file is editted its plugin file is loaded
+filetype indent on 			" maintain indentation
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4 " single tab as 4 spaces
 
-" disable backup files
-set nobackup
-set nowritebackup
-set noswapfile
-" set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace
 
-" visual settings
-colorscheme onehalfdark
-set cursorline                       " highlight current line
-
-set number
-set numberwidth=5
-
-" make it obvious where 100 characters is
-set textwidth=80
-set colorcolumn=+1
-
-" folding
-autocmd FileType go setlocal foldmethod=syntax
-autocmd FileType java setlocal foldmethod=syntax
-autocmd FileType python setlocal foldmethod=indent shiftwidth=4
-autocmd FileType javascript setlocal foldmethod=syntax
-autocmd FileType ruby setlocal foldmethod=syntax
-autocmd FileType css setlocal foldmethod=indent shiftwidth=2 tabstop=2
-" autocmd FileType html setlocal foldmethod=syntax shiftwidth=2 tabstop=2
-autocmd FileType html setlocal foldmethod=manual shiftwidth=2 tabstop=2
-set foldlevelstart=20                    "start level 20 should result in folds open by default
-
-" Custom mapping
-let mapleader = " "
+" custom mapping key
+let mapleader = ","
 let maplocalleader = "\\"
-inoremap jk <ESC>
-inoremap <C-f> <Right>
-inoremap <C-b> <Left>
-inoremap <C-e> <C-o>$
-inoremap <C-a> <C-o>^
 
-nnoremap <Leader><CR> :nohlsearch<CR>
+" others
+set autowrite				" write the content of the file automatically if we call :make
 
-" open file
-nnoremap <Leader>w :w!<CR>
-nnoremap <Leader>t :tabe
-nnoremap <Leader>n :tabe<CR>
-nnoremap <Leader>c :E<CR>
-nnoremap <Leader>e :e
+" KEY MAPPINGS
+nnoremap <Leader><CR> :nohlsearch<CR>   " stop highlighting
 
 " switch between windows
 map <C-h> <C-w>h
@@ -110,23 +50,87 @@ nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
 
-" recall commands from history
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
-
 " quickly traverse Vim's lists
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
 
-map <Leader>r :so $MYVIMRC<CR>
+" PLUGINS SETTINGS
 
-"""""""""""""""""""""""
-" package configuration
-"""""""""""""""""""""""
-" FZF
-" Always enable preview window on the right with 60% width
+" vim-go
+let g:go_list_type = "quickfix"
+let g:go_fmt_command = "goimports"
+
+map <C-n> :cnext<CR>
+map <C-p> :cprevious<CR>
+nnoremap <leader>a :cclose<CR>
+
+autocmd FileType go nmap <leader>r <Plug>(go-run)
+autocmd FileType go nmap <leader>t <Plug>(go-test)
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+autocmd FileType go nmap <Leader>a :GoAlternate<CR>
+
+let g:go_def_mapping_enabled = 0 	" disabled GoDef and delegate to coc.vim
+
+" coc.vim
+set hidden 				" TextEdit might fail if hidden is not set
+set nobackup				" Some servers have issues with backup files
+set nowritebackup
+set cmdheight=2				" give more space for displaying messages
+set updatetime=300			" having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience
+set shortmess+=c			" don't pass messages to |ins-completion-menu|
+
+" use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" goTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" fzf
+" always enable preview window on the right with 60% width
 " ripgrep is required
 let g:fzf_preview_window = 'right:60%'
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
@@ -142,33 +146,3 @@ let g:nerdtree_sync_cursorline = 1
 let g:NERDSpaceDelims = 1
 let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
-
-" Esearch
-let g:esearch = {
-  \ 'adapter': 'rg',
-  \ 'backend': 'nvim'
-  \}
-
-" Lightline
-let g:lightline = {
-      \ 'colorscheme': 'onehalfdark',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead',
-      \ },
-      \ }
-
-" markdown-preview.nvim
-let g:mkdp_refresh_slow = 1
-
-" indentLine
-let g:indentLine_setConceal = 2
-" default ''.
-" n for Normal mode
-" v for Visual mode
-" i for Insert mode
-" c for Command line editing, for 'incsearch'
-let g:indentLine_concealcursor = "nv"
