@@ -141,9 +141,13 @@ endfunction
 " ripgrep is required
 let g:fzf_preview_window = 'right:60%'
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden -g "!{node_modules/*,.git/*}"'
+" command to generate tags file, use Exuberant Ctags http://ctags.sourceforge.net/
+let g:fzf_tags_command = 'ctags -R --exclude=env --exclude=.git --exclude=node_modules'
 nnoremap <silent> <Leader>o :Files<CR>
 nnoremap <silent> <Leader>f :Rg<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>t :Tags<CR>
+nnoremap <silent> <Leader>T :BTags<CR>
 
 " NERDTree
 map <C-a> :NERDTreeToggle<CR>
