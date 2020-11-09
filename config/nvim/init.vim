@@ -27,11 +27,8 @@ autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4 " si
 
 
 " custom mapping key
-let mapleader = ","
+let mapleader = "\<Space>"
 let maplocalleader = "\\"
-
-" others
-set autowrite				" write the content of the file automatically if we call :make
 
 " KEY MAPPINGS
 nnoremap <Leader><CR> :nohlsearch<CR>   " stop highlighting
@@ -56,6 +53,16 @@ nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
 
+" triger `autoread` when files changes on disk
+" https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
+" https://vi.stackexchange.com/questions/13692/prevent-focusgained-autocmd-running-in-command-line-editing-mode
+autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+    \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+" notification after file change
+" https://vi.stackexchange.com/questions/13091/autocmd-event-for-autoread
+autocmd FileChangedShellPost *
+  \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+
 " PLUGINS SETTINGS
 
 " vim-go
@@ -66,8 +73,8 @@ map <C-n> :cnext<CR>
 map <C-p> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 
-autocmd FileType go nmap <leader>r <Plug>(go-run)
-autocmd FileType go nmap <leader>t <Plug>(go-test)
+autocmd FileType go nmap gr <Plug>(go-run)
+autocmd FileType go nmap gt <Plug>(go-test)
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
   let l:file = expand('%')
@@ -77,9 +84,9 @@ function! s:build_go_files()
     call go#cmd#Build(0)
   endif
 endfunction
-autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
-autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
-autocmd FileType go nmap <Leader>a :GoAlternate<CR>
+autocmd FileType go nmap gb :<C-u>call <SID>build_go_files()<CR>
+autocmd FileType go nmap gc <Plug>(go-coverage-toggle)
+autocmd FileType go nmap ga :GoAlternate<CR>
 
 let g:go_def_mapping_enabled = 0 	" disabled GoDef and delegate to coc.vim
 
@@ -133,7 +140,7 @@ endfunction
 " always enable preview window on the right with 60% width
 " ripgrep is required
 let g:fzf_preview_window = 'right:60%'
-let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden -g "!{node_modules/*,.git/*}"'
 nnoremap <silent> <Leader>o :Files<CR>
 nnoremap <silent> <Leader>f :Rg<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
