@@ -3,6 +3,7 @@
 
 call plug#begin('~/.config/nvim/plugged')
 Plug 'morhetz/gruvbox'
+Plug 'NLKNguyen/papercolor-theme'
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'unkiwii/vim-nerdtree-sync'
@@ -15,16 +16,17 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'jiangmiao/auto-pairs'
+Plug 'ledger/vim-ledger'
+Plug 'iamcco/markdown-preview.vim'
 call plug#end()
 
 
 " GENERAL 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 
 " Visual
-set background=dark
-colorscheme gruvbox
+set background=light
+colorscheme PaperColor
 set cursorline				" highlight current line
 set nu					" enable line numbers
 
@@ -33,6 +35,7 @@ filetype on 				" detect files based on type
 filetype plugin on			" when a file is editted its plugin file is loaded
 filetype indent on 			" maintain indentation
 autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4 " single tab as 4 spaces
+autocmd BufNewFile,BufRead *.ledger setlocal foldmethod=syntax " single tab as 4 spaces
 
 " Triger `autoread` when files changes on disk
 " https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
@@ -44,8 +47,16 @@ autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
 autocmd FileChangedShellPost *
   \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
+" Markdown
+let g:markdown_folding = 1 		   	" Enable markdown folding
+au FileType markdown setlocal foldlevel=99 	" Start with all folds open
+
 " PLUGINS SETTINGS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" lightline[[[
+let g:lightline = { 'colorscheme': 'PaperColor' }
+"]]]
 
 " vim-go [[[
 let g:go_list_type = "quickfix"
@@ -110,6 +121,10 @@ let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
 " ]]]
 
+" Leader [[[
+let g:ledger_fold_blanks = 1
+let g:ledger_extra_options = '--pedantic --explicit --check-payees'
+" ]]]
 
 " MAPPINGS 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
