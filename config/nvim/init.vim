@@ -17,7 +17,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'ledger/vim-ledger'
-Plug 'iamcco/markdown-preview.vim'
+Plug 'iamcco/markdown-preview.nvim'
 call plug#end()
 
 
