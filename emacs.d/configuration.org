@@ -1,0 +1,277 @@
+#+title:  Emacs Configuration
+#+author: Trong Bui
+
+* Package manager
+** Set up ~straight.el~
+Use ~straight.el~ for package manager, as a replacement for ~package.el~.
+#+begin_src emacs-lisp
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+#+end_src
+
+** Integrate with ~use-package~
+#+begin_src emacs-lisp
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+#+end_src
+
+* UI
+** General
+#+begin_src emacs-lisp
+(scroll-bar-mode -1)
+(tool-bar-mode   -1)
+(tooltip-mode    -1)
+(menu-bar-mode   -1)
+(global-linum-mode 1)
+(setq-default word-wrap t)
+(add-to-list 'default-frame-alist '(font . "IBM Plex Mono-14:antialias=true:hinting=false"))
+(add-to-list 'default-frame-alist '(height . 24))
+(add-to-list 'default-frame-alist '(width . 80))
+#+end_src
+** Line column
+#+begin_src emacs-lisp
+(setq-default fill-column 120)
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+#+end_src
+
+** Theme
+#+begin_src emacs-lisp
+(use-package gruvbox-theme
+  :config (load-theme 'gruvbox t))
+;;(use-package dracula-theme
+;;  :config (load-theme 'dracula t)
+;;  (set-face-background 'mode-line "#510370")
+;;  (set-face-background 'mode-line-inactive "#212020"))
+;;(custom-set-faces
+;; '(mode-line ((t (:background "#510370" :foreground "#EEEEEE")))))
+#+end_src
+** Mode line
+#+begin_src emacs-lisp
+(setq-default mode-line-format '("%e"
+                                 mode-line-front-space
+                                 " "
+                                 mode-line-modified
+                                 " "
+                                 "%[" mode-line-buffer-identification "%]"
+                                 "   "
+                                 "L%l"
+                                 "  "
+                                 mode-line-modes
+                                 mode-line-misc-info
+                                 projectile-mode-line
+                                 " "
+                                 (:propertize " " display ((space :align-to (- right 14))))
+                                 (vc-mode vc-mode)
+                                 mode-line-end-spaces))
+#+end_src
+** Highlight current line
+#+begin_src emacs-lisp
+(when window-system
+  (global-hl-line-mode))
+#+end_src
+* General configuration
+** Read ~$PATH~
+Useful for ~elpy~ package to load ~python3~ executable from ~$PATH~
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell :ensure t)
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+#+end_src
+** Windows switching
+#+begin_src emacs-lisp
+(global-set-key (kbd "M-o") 'other-window)
+#+end_src
+** File format
+*** Add a newline at the end
+#+begin_src emacs-lisp
+(setq require-final-newline t)
+#+end_src
+*** Delete trailing whitespace
+#+begin_src emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+*** Tab and indentation
+#+begin_src emacs-lisp
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq tab-width 4)
+#+end_src
+** Org Mode
+*** Display image inline
+#+begin_src emacs-lisp
+(setq org-startup-with-inline-images t)
+#+end_src
+*** Todo
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      '((sequence "TODO" "DOING" "|" "DONE")))
+(setq org-todo-keyword-faces
+      '(("TODO"    . "grey")
+        ("DOING"   . "#fdcb6e")
+        ("DONE"    . "green")))
+(setq org-log-done 'note)
+#+end_src
+*** Visual
+#+begin_src emacs-lisp
+(setq org-time-stamp-custom-formats '("<%a %D>" . "<%a %b %e %Y %H:%M>"))
+
+(with-eval-after-load 'org
+  (setq org-startup-indented t) ; Enable `org-indent-mode' by default
+  (add-hook 'org-mode-hook #'visual-line-mode))
+#+end_src
+** Helm
+#+begin_src emacs-lisp
+(use-package helm
+  :demand
+  :diminish helm-mode
+  :bind (("M-x" . helm-M-x)
+         ("M-y" . helm-show-kill-ring)
+         ("C-x b" . helm-mini)
+         ("C-x C-f" . helm-find-files)
+         ("C-x r l" . helm-bookmarks)
+         ("C-c s" . helm-occur)
+         :map helm-find-files-map
+         ("C-<tab>"         . helm-execute-persistent-action)
+         ("C-<backspace>" . helm-find-files-up-one-level))
+  :config
+  (helm-mode 1)
+  (setq helm-M-x-fuzzy-match t)
+  (setq helm-locate-fuzzy-match t)
+  (setq helm-lisp-fuzzy-completion t)
+  (setq helm-bookmark-show-location t)
+  (setq helm-buffer-max-length 30))
+#+end_src
+
+** Eshell
+#+begin_src emacs-lisp
+(defun eshell-here ()
+  "Opens up a new shell in the directory associated with the
+    current buffer. The eshell is renamed to match current
+    directory to make multiple eshell windows easier."
+  (interactive)
+  (let* ((height (/ (window-total-height) 3)))
+    (split-window-vertically (- height))
+    (other-window 1)
+    (eshell "new")
+    (insert (concat "ls"))
+    (eshell-send-input)))
+
+(bind-key "M-`" 'eshell-here)
+#+end_src
+** Presentation view
+#+begin_src emacs-lisp
+(defun toggle-presentation ()
+  "Toggle presentation features, like font increase."
+  (interactive)
+  (let ((regular-fontsize 140)
+        (presentation-fontsize 240))
+    (if (equal (face-attribute 'default :height) regular-fontsize)
+        (set-face-attribute 'default nil :height presentation-fontsize)
+      (set-face-attribute 'default nil :height regular-fontsize))))
+#+end_src
+* Programing
+** Projectile
+#+begin_src emacs-lisp
+(use-package ag)
+(use-package helm-ag)
+(use-package projectile
+  :config
+  (projectile-mode)
+  (setq-default projectile-mode-line
+   '(:eval
+     (if (file-remote-p default-directory)
+         " Proj"
+       (format " Proj[%s]" (projectile-project-name)))))
+  (add-to-list 'projectile-globally-ignored-directories "node_modules"))
+#+end_src
+*** Set default prefix key
+#+begin_src emacs-lisp
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+#+end_src
+** Company
+#+begin_src emacs-lisp
+(use-package company
+  :diminish company-mode
+  :config
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-minimum-prefix-length 2)
+  (setq company-dabbrev-downcase nil)
+  (bind-keys :map company-active-map
+             ("C-d" . company-show-doc-buffer)
+             ("C-l" . company-show-location)
+             ("C-n" . company-select-next)
+             ("C-p" . company-select-previous)
+             ("C-t" . company-select-next)
+             ("C-s" . company-select-previous)
+             ("TAB" . company-complete)))
+#+end_src
+** Magit
+#+begin_src emacs-lisp
+(use-package magit
+  :bind ("C-x g" . magit-status))
+#+end_src
+** Flycheck
+#+begin_src emacs-lisp
+(use-package flycheck
+  :diminish flycheck-mode
+  :config (flycheck-mode 1)
+  (add-hook 'emacs-lisp-mode-hook 'flycheck-mode)
+  (add-hook 'json-mode-hook 'flycheck-mode))
+#+end_src
+** Commenting
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-;") #'comment-or-uncomment-region)
+#+end_src
+** Highlight indentation
+#+begin_src emacs-lisp
+(use-package highlight-indent-guides
+  :ensure t
+  :init
+  (setq highlight-indent-guides-method 'column)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+#+end_src
+** Smart parens
+#+begin_src emacs-lisp
+(use-package smartparens
+  :ensure t
+  :init (smartparens-global-mode 1)
+  :diminish smartparens-mode)
+#+end_src
+** Languages
+*** Python
+#+begin_src emacs-lisp
+(use-package elpy
+  :ensure t
+  :defer t
+  :init
+  (setq elpy-rpc-python-command "python3")
+  (advice-add 'python-mode :before 'elpy-enable)
+  (add-hook 'python-mode-hook 'flycheck-mode))
+#+end_src
+*** Go
+#+begin_src emacs-lisp
+(use-package go-mode
+  :config
+  (add-hook 'before-save-hook #'gofmt-before-save)
+  (add-hook 'go-mode-hook 'flycheck-mode)
+  (setq go-packages-function 'go-packages-go-list)
+  :bind
+  (:map go-mode-map ("M-." . godef-jump)))
+#+end_src
+**** Company integration
+#+begin_src
+(use-package company-go
+  :config
+  (add-hook 'go-mode-hook 'company-mode)
+  (add-to-list 'company-backends 'company-go))
+#+end_src
