@@ -34,7 +34,7 @@ Use ~straight.el~ for package manager, as a replacement for ~package.el~.
 (menu-bar-mode   -1)
 (global-linum-mode 1)
 (setq-default word-wrap t)
-(add-to-list 'default-frame-alist '(font . "IBM Plex Mono-14:antialias=true:hinting=false"))
+(add-to-list 'default-frame-alist '(font . "Input Mono-14"))
 (add-to-list 'default-frame-alist '(height . 24))
 (add-to-list 'default-frame-alist '(width . 80))
 #+end_src
@@ -46,8 +46,8 @@ Use ~straight.el~ for package manager, as a replacement for ~package.el~.
 
 ** Theme
 #+begin_src emacs-lisp
-(use-package gruvbox-theme
-  :config (load-theme 'gruvbox t))
+;;(use-package gruvbox-theme
+;;  :config (load-theme 'gruvbox t))
 ;;(use-package dracula-theme
 ;;  :config (load-theme 'dracula t)
 ;;  (set-face-background 'mode-line "#510370")
@@ -70,7 +70,7 @@ Use ~straight.el~ for package manager, as a replacement for ~package.el~.
                                  mode-line-misc-info
                                  projectile-mode-line
                                  " "
-                                 (:propertize " " display ((space :align-to (- right 14))))
+                                 (:propertize " " display ((space :align-to (- right 34))))
                                  (vc-mode vc-mode)
                                  mode-line-end-spaces))
 #+end_src
@@ -90,6 +90,18 @@ Useful for ~elpy~ package to load ~python3~ executable from ~$PATH~
 ** Windows switching
 #+begin_src emacs-lisp
 (global-set-key (kbd "M-o") 'other-window)
+#+end_src
+** Highlight brackets
+#+begin_src emacs-lisp
+(show-paren-mode 1)
+#+end_src
+** Smooth scrolling
+#+begin_src emacs-lisp
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) ;; keyboard scroll one line at a time
 #+end_src
 ** File format
 *** Add a newline at the end
