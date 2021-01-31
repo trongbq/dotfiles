@@ -164,22 +164,6 @@ Useful for ~elpy~ package to load ~python3~ executable from ~$PATH~
   (setq helm-buffer-max-length 30))
 #+end_src
 
-** Eshell
-#+begin_src emacs-lisp
-(defun eshell-here ()
-  "Opens up a new shell in the directory associated with the
-    current buffer. The eshell is renamed to match current
-    directory to make multiple eshell windows easier."
-  (interactive)
-  (let* ((height (/ (window-total-height) 3)))
-    (split-window-vertically (- height))
-    (other-window 1)
-    (eshell "new")
-    (insert (concat "ls"))
-    (eshell-send-input)))
-
-(bind-key "M-`" 'eshell-here)
-#+end_src
 ** Presentation view
 #+begin_src emacs-lisp
 (defun toggle-presentation ()
@@ -192,23 +176,9 @@ Useful for ~elpy~ package to load ~python3~ executable from ~$PATH~
       (set-face-attribute 'default nil :height regular-fontsize))))
 #+end_src
 * Programing
-** Projectile
+** Project
 #+begin_src emacs-lisp
-(use-package ag)
-(use-package helm-ag)
-(use-package projectile
-  :config
-  (projectile-mode)
-  (setq-default projectile-mode-line
-   '(:eval
-     (if (file-remote-p default-directory)
-         " Proj"
-       (format " Proj[%s]" (projectile-project-name)))))
-  (add-to-list 'projectile-globally-ignored-directories "node_modules"))
-#+end_src
-*** Set default prefix key
-#+begin_src emacs-lisp
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(use-package project)
 #+end_src
 ** Company
 #+begin_src emacs-lisp
