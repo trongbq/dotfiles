@@ -1,108 +1,145 @@
+" PLUGINS 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 call plug#begin('~/.config/nvim/plugged')
-Plug 'tpope/vim-fugitive' "Fugitive is the premier Vim plugin for Git
-Plug 'sheerun/vim-polyglot' "A collection of language packs for Vim
-Plug 'neoclide/coc.nvim', {'branch': 'release'} "Intellisense engine
-Plug 'scrooloose/nerdtree' "A tree explorer plugin for vim
-Plug 'itchyny/lightline.vim' "A light and configurable statusline/tabline plugin for Vim
-Plug 'easymotion/vim-easymotion'
-Plug 'unkiwii/vim-nerdtree-sync' " Vim plugin for synchronizing current open file with NERDtree
-Plug 'tpope/vim-surround' " The plugin provides mappings to easily delete, change and add such surroundings in pairs.
-Plug 'jiangmiao/auto-pairs' "Insert or delete brackets, parens, quotes in pair.
-Plug 'scrooloose/nerdcommenter' " Comment code
-Plug 'mg979/vim-visual-multi' "Multiple cursors plugin
-Plug 'eugen0329/vim-esearch' "Perform search in files easily
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "A command-line fuzzy finder
+Plug 'morhetz/gruvbox'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'itchyny/lightline.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'unkiwii/vim-nerdtree-sync'
+Plug 'majutsushi/tagbar'
+Plug 'Yggdroot/indentLine'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'Yggdroot/indentLine' "A vim plugin to display the indention levels with thin vertical lines
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
-Plug 'airblade/vim-gitgutter'
-Plug 'mzlogin/vim-markdown-toc'
+Plug 'scrooloose/nerdcommenter'
+Plug 'jiangmiao/auto-pairs'
+Plug 'ledger/vim-ledger'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 call plug#end()
 
-" general settings
-filetype plugin indent on            " load filetype-specific ident files
-syntax on                            "Turn on syntax highlighting
-set tabstop=2                        " number of visual spaces per TAB
-set softtabstop=2                    " number of spaces in tab when editing
-set autoindent                       " auto-indent new lines
-set shiftwidth=2                     " number of auto-indent spaces
-set smartindent                      " enable smart-indent
-set smarttab                         " enable smart-tabs
-set showmatch                        " highlight matching [{()}]
-set incsearch                        " search as characters are entered
-set hlsearch                         " hightlight matches
-set autoread
-set autowrite
-set expandtab                        " expand tab to spaces
-set autoindent                       " auto-indent new lines
-set smartindent                      " enable smart-indent
-set softtabstop=4                    " number of spaces per Tab
-set showcmd                          " show imcomplete command
-set re=1                             " setting regex serch
-set foldenable                       " enable folding
-set encoding=UTF-8
-set hidden
-set mouse=a "enable mouse for all mode
-set ignorecase
-set relativenumber
 
-" auto remove trailing spaces
-autocmd BufWritePre * %s/\s\+$//e
+" GENERAL 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 
-" disable backup files
-set nobackup
+" Visual
+colorscheme gruvbox
+set cursorline				" highlight current line
+set nu					" enable line numbers
+
+" Filetype
+filetype on 				" detect files based on type
+filetype plugin on			" when a file is editted its plugin file is loaded
+filetype indent on 			" maintain indentation
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4 " single tab as 4 spaces
+autocmd BufNewFile,BufRead *.ledger setlocal foldmethod=syntax " single tab as 4 spaces
+
+" Triger `autoread` when files changes on disk
+" https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
+" https://vi.stackexchange.com/questions/13692/prevent-focusgained-autocmd-running-in-command-line-editing-mode
+autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+    \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+" Notification after file change
+" https://vi.stackexchange.com/questions/13091/autocmd-event-for-autoread
+autocmd FileChangedShellPost *
+  \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+
+" Markdown
+let g:markdown_folding = 1 		   	" Enable markdown folding
+au FileType markdown setlocal foldlevel=99 	" Start with all folds open
+
+" PLUGINS SETTINGS
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" lightline[[[
+let g:lightline = { 'colorscheme': 'PaperColor' }
+"]]]
+
+" vim-go [[[
+let g:go_list_type = "quickfix"
+let g:go_fmt_command = "goimports"
+let g:go_def_mapping_enabled = 0 	" disabled GoDef and delegate to coc.vim
+" ]]]
+
+" coc.vim [[[
+set hidden 				" TextEdit might fail if hidden is not set
+set nobackup				" Some servers have issues with backup files
 set nowritebackup
-set noswapfile
-" set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace
+set cmdheight=2				" give more space for displaying messages
+set updatetime=300			" having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience
+set shortmess+=c			" don't pass messages to |ins-completion-menu|
 
-" visual settings
-colorscheme onehalfdark
-set cursorline                       " highlight current line
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" Other plugin before putting this into your config
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-set number
-set numberwidth=5
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-" make it obvious where 100 characters is
-set textwidth=80
-set colorcolumn=+1
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" Format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-" folding
-autocmd FileType go setlocal foldmethod=syntax
-autocmd FileType java setlocal foldmethod=syntax
-autocmd FileType python setlocal foldmethod=indent shiftwidth=4
-autocmd FileType javascript setlocal foldmethod=syntax
-autocmd FileType ruby setlocal foldmethod=syntax
-autocmd FileType css setlocal foldmethod=indent shiftwidth=2 tabstop=2
-" autocmd FileType html setlocal foldmethod=syntax shiftwidth=2 tabstop=2
-autocmd FileType html setlocal foldmethod=manual shiftwidth=2 tabstop=2
-set foldlevelstart=20                    "start level 20 should result in folds open by default
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+" ]]]
 
-" Custom mapping
-let mapleader = " "
+" fzf [[[
+" Always enable preview window on the right with 60% width
+" ripgrep is required
+let g:fzf_preview_window = 'right:60%'
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden -g "!{node_modules/*,.git/*}"'
+" command to generate tags file, use Exuberant Ctags http://ctags.sourceforge.net/
+let g:fzf_tags_command = 'ctags -R --exclude=env --exclude=.git --exclude=node_modules'
+" ]]]
+
+" NERDTree [[[
+let g:nerdtree_sync_cursorline = 1
+" ]]]
+
+" NERDCommenter [[[
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDDefaultAlign = 'left'
+" ]]]
+
+" Leader [[[
+let g:ledger_fold_blanks = 1
+let g:ledger_extra_options = '--pedantic --explicit --check-payees'
+" ]]]
+
+" MAPPINGS 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Custom mapping key
+let mapleader = "\<Space>"
 let maplocalleader = "\\"
-inoremap jk <ESC>
-inoremap <C-f> <Right>
-inoremap <C-b> <Left>
-inoremap <C-e> <C-o>$
-inoremap <C-a> <C-o>^
+nnoremap <Leader><CR> :nohlsearch<CR>   " stop highlighting
 
-nnoremap <Leader><CR> :nohlsearch<CR>
-
-" open file
-nnoremap <Leader>w :w!<CR>
-nnoremap <Leader>t :tabe
-nnoremap <Leader>n :tabe<CR>
-nnoremap <Leader>c :E<CR>
-nnoremap <Leader>e :e
-
-" switch between windows
+" Switch between windows
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-" copy and paste to system clipboard
+" Copy and paste to system clipboard
 vmap <Leader>y "+y
 vmap <Leader>d "+d
 nmap <Leader>p "+p
@@ -110,65 +147,35 @@ nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
 
-" recall commands from history
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
-
-" quickly traverse Vim's lists
+" Quickly traverse Vim's lists
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
 
-map <Leader>r :so $MYVIMRC<CR>
+" coc.vim [[[
+" Go to code navigation
+nmap <silent> ,d <Plug>(coc-definition)
+nmap <silent> ,y <Plug>(coc-type-definition)
+nmap <silent> ,i <Plug>(coc-implementation)
+nmap <silent> ,r <Plug>(coc-references)
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-"""""""""""""""""""""""
-" package configuration
-"""""""""""""""""""""""
-" FZF
-" Always enable preview window on the right with 60% width
-" ripgrep is required
-let g:fzf_preview_window = 'right:60%'
-let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
+" ]]]
+
+" fzf [[[
 nnoremap <silent> <Leader>o :Files<CR>
 nnoremap <silent> <Leader>f :Rg<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>t :Tags<CR>
+nnoremap <silent> <Leader>T :BTags<CR>
+" ]]]
 
-" NERDTree
-map <C-a> :NERDTreeToggle<CR>
-let g:nerdtree_sync_cursorline = 1
+" NERDTree [[[
+map <leader>a :NERDTreeToggle<CR>
+" ]]]
 
-" NERDCommenter
-let g:NERDSpaceDelims = 1
-let g:NERDCompactSexyComs = 1
-let g:NERDDefaultAlign = 'left'
-
-" Esearch
-let g:esearch = {
-  \ 'adapter': 'rg',
-  \ 'backend': 'nvim'
-  \}
-
-" Lightline
-let g:lightline = {
-      \ 'colorscheme': 'onehalfdark',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead',
-      \ },
-      \ }
-
-" markdown-preview.nvim
-let g:mkdp_refresh_slow = 1
-
-" indentLine
-let g:indentLine_setConceal = 2
-" default ''.
-" n for Normal mode
-" v for Visual mode
-" i for Insert mode
-" c for Command line editing, for 'incsearch'
-let g:indentLine_concealcursor = "nv"
+" Tagbar [[[
+map <leader>l :TagbarToggle<CR>
+" ]]]
