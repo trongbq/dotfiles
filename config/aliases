@@ -1,0 +1,25 @@
+# Git
+alias gs='git status'
+alias ga='git add'
+alias gp='git push'
+alias gpo='git push origin'
+alias gpl='git pull'
+alias gplo='git pull origin'
+alias gb='git branch'
+alias gc='git commit'
+alias gch='git checkout'
+alias gchn='git checkout -b'
+alias gl='git log'
+alias gr='git remote'
+alias grs='git remote show'
+alias glo='git log --pretty="oneline"'
+alias glol='git log --graph --oneline --decorate'
+alias gclean="git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 git branch -d"
+
+# Fast switching directory
+alias work="cd $HOME/workspace"
+alias doc="cd $HOME/Dropbox/datacenter"
+
+# Misc
+alias treea="tree -a -I '.git'"
+
