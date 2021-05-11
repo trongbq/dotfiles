@@ -28,13 +28,14 @@ Use ~straight.el~ for package manager, as a replacement for ~package.el~.
 * UI
 ** General
 #+begin_src emacs-lisp
+(setq-default cursor-type 'bar)
 (scroll-bar-mode -1)
 (tool-bar-mode   -1)
 (tooltip-mode    -1)
 (menu-bar-mode   -1)
 (global-linum-mode 1)
 (setq-default word-wrap t)
-(add-to-list 'default-frame-alist '(font . "Input Mono-14"))
+(add-to-list 'default-frame-alist '(font . "Consolas-16"))
 (add-to-list 'default-frame-alist '(height . 24))
 (add-to-list 'default-frame-alist '(width . 80))
 #+end_src
@@ -54,7 +55,10 @@ Use ~straight.el~ for package manager, as a replacement for ~package.el~.
 ;;  (set-face-background 'mode-line-inactive "#212020"))
 ;;(custom-set-faces
 ;; '(mode-line ((t (:background "#510370" :foreground "#EEEEEE")))))
-(load-theme 'adwaita)
+(use-package spacemacs-theme
+  :defer t
+  :init (load-theme 'spacemacs-light t))
+;;(load-theme 'adwaita)
 #+end_src
 ** Mode line
 #+begin_src emacs-lisp
@@ -77,10 +81,13 @@ Use ~straight.el~ for package manager, as a replacement for ~package.el~.
 #+end_src
 ** Highlight current line
 #+begin_src emacs-lisp
-(when window-system
-  (global-hl-line-mode))
+;;(when window-system
+;;  (global-hl-line-mode))
 #+end_src
 * General configuration
+#+begin_src emacs-lisp
+(setq auto-save-default nil)
+#+end_src
 ** Read ~$PATH~
 Useful for ~elpy~ package to load ~python3~ executable from ~$PATH~
 #+begin_src emacs-lisp
@@ -119,29 +126,6 @@ Useful for ~elpy~ package to load ~python3~ executable from ~$PATH~
 (setq-default tab-width 4)
 (setq tab-width 4)
 #+end_src
-** Org Mode
-*** Display image inline
-#+begin_src emacs-lisp
-(setq org-startup-with-inline-images t)
-#+end_src
-*** Todo
-#+begin_src emacs-lisp
-(setq org-todo-keywords
-      '((sequence "BACKLOG" "INPROGRESS" "|" "COMPLETED")))
-(setq org-todo-keyword-faces
-      '(("BACKLOG"    . "grey")
-        ("INPROGRESS"   . "#fdcb6e")
-        ("COMPLETED"    . "green")))
-(setq org-log-done 'note)
-#+end_src
-*** Visual
-#+begin_src emacs-lisp
-(setq org-time-stamp-custom-formats '("<%a %D>" . "<%a %b %e %Y %H:%M>"))
-
-(with-eval-after-load 'org
-  (setq org-startup-indented t) ; Enable `org-indent-mode' by default
-  (add-hook 'org-mode-hook #'visual-line-mode))
-#+end_src
 ** Presentation view
 #+begin_src emacs-lisp
 (defun toggle-presentation ()
@@ -153,13 +137,47 @@ Useful for ~elpy~ package to load ~python3~ executable from ~$PATH~
         (set-face-attribute 'default nil :height presentation-fontsize)
       (set-face-attribute 'default nil :height regular-fontsize))))
 #+end_src
-** Org Bullets
+** Org Mode
+*** Display image inline
+#+begin_src emacs-lisp
+(setq org-startup-with-inline-images nil)
+(setq org-image-actual-width nil)
+#+end_src
+*** Todo
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      '((sequence "TODO" "INPG" "|" "COMP")))
+(setq org-todo-keyword-faces
+      '(("TODO"    . "grey")
+        ("INPG"   . "#fdcb6e")
+        ("COMP"    . "green")))
+(setq org-log-done 'note)
+#+end_src
+*** Visual
+#+begin_src emacs-lisp
+(setq org-time-stamp-custom-formats '("<%a %D>" . "<%a %b %e %Y %H:%M>"))
+
+(with-eval-after-load 'org
+  (setq org-startup-indented t) ; Enable `org-indent-mode' by default
+  (add-hook 'org-mode-hook #'visual-line-mode))
+#+end_src
+*** Hide the emphasis markup
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t)
+#+end_src
+*** A font-lock substitution for list markers
+#+begin_src emacs-lisp
+(font-lock-add-keywords 'org-mode
+                        '(("^ *\\([-]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "‚Ä¢"))))))
+#+end_src
+*** org-bullets
 #+begin_src emacs-lisp
 (use-package org-bullets
-  :init
-  (add-hook 'org-mode-hook #'org-bullets-mode))
+  :config
+   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+end_src
-** Deft
+*** Deft
 #+begin_src emacs-lisp
 (use-package deft
   :ensure t
@@ -171,6 +189,56 @@ Useful for ~elpy~ package to load ~python3~ executable from ~$PATH~
         deft-use-filename-as-title t
         deft-use-filter-string-for-filename t)
   (global-set-key (kbd "C-c d") 'deft))
+#+end_src
+*** Custom font
+#+begin_src emacs-lisp
+  (let* ((variable-tuple
+          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+         (base-font-color     (face-foreground 'default nil 'default))
+         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+    (custom-theme-set-faces
+     'user
+     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+#+end_src
+*** variable-pitch-mode
+#+begin_src emacs-lisp
+ (custom-theme-set-faces
+   'user
+   '(variable-pitch ((t (:family "ETBembo" :height 180 :weight thin))))
+   '(fixed-pitch ((t ( :family "Consolas"  :height 160)))))
+(add-hook 'org-mode-hook 'variable-pitch-mode)
+#+end_src
+*** Config faces for specific Org elements
+#+begin_src emacs-lisp
+(custom-theme-set-faces
+   'user
+   '(org-block ((t (:inherit fixed-pitch))))
+   '(org-code ((t (:inherit (shadow fixed-pitch)))))
+   '(org-document-info ((t (:foreground "dark orange"))))
+   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+   '(org-link ((t (:foreground "royal blue" :underline t))))
+   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-property-value ((t (:inherit fixed-pitch))) t)
+   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+   '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+#+end_src
+*** Config folding style
+#+begin_src emacs-lisp
+(setq org-ellipsis "‚ñæ")
 #+end_src
 * Programing
 ** Project management
