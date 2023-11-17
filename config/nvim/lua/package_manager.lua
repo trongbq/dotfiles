@@ -14,11 +14,13 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   "ellisonleao/gruvbox.nvim",
   "jiangmiao/auto-pairs",
-  {
-    "nvim-telescope/telescope.nvim", tag = "0.1.4",  dependencies = { "nvim-lua/plenary.nvim" }
-  },
-  {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"},
-  {"nvim-treesitter/playground"},
-  {"tpope/vim-fugitive"},
-  {"neovim/nvim-lspconfig"},
+  { "nvim-telescope/telescope.nvim", tag = "0.1.4",  dependencies = { "nvim-lua/plenary.nvim" } },
+  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+  "nvim-treesitter/playground",
+  "tpope/vim-fugitive",
+  "neovim/nvim-lspconfig",
+  "hrsh7th/nvim-cmp",
+  "hrsh7th/cmp-nvim-lsp",
+  "saadparwaiz1/cmp_luasnip",
+  "L3MON4D3/LuaSnip",
 })
